@@ -13,6 +13,7 @@ pygame.display.init()
 BLUE = pygame.Color(0,170,255)
 BLACK = pygame.Color(8,13,13)
 GREEN = pygame.Color(8,100,60)
+WHITE = pygame.Color(255,255,255)
 speed_x = 0
 speed_y = 0
 
@@ -53,6 +54,7 @@ for x in range(100):
       if coin.isHidden == False:
         screen.fill(GREEN, coin.rect)
 
+global score
 score = 0
 
 #collision
@@ -66,6 +68,28 @@ def collision_loop():
       coin.isHidden = True
       score += 1
 
+pygame.font.init()
+FONT = pygame.font.SysFont("freeserif",36)
+
+#Show score
+def render_score():
+  global FONT
+
+  screen.blit(
+    FONT.render("Score: " + str(score), True,WHITE),
+    (40,20)
+  )
+
+#Show Time
+def render_time():  
+  global FONT
+
+  seconds = int(pygame.time.get_ticks() / 1000)
+  screen.blit(
+    FONT.render("Time: " + str(seconds), True,WHITE),
+    (40,50)
+  )
+
 #Main
 def main():
   while True:
@@ -74,6 +98,8 @@ def main():
         exit(0)
       pygame.event.pump()
       key = pygame.key.get_pressed()
+      global FONT
+
 
       if key[K_UP]:
         move_up()
@@ -90,6 +116,8 @@ def main():
       screen.fill(BLACK)
       screen.fill(BLUE,player)
       render_coin_loop(screen)
+      render_score()
+      render_time()
       pygame.display.flip()
 
 main()
